@@ -33,7 +33,7 @@ export default function Login() {
 
 
 
-        Router.push('/dashboard')
+        Router.push('/')
 
     }
 

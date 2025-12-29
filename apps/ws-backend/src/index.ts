@@ -34,17 +34,22 @@ function checkUser(token: string): string | null {
 
 wss.on("connection", (ws, request) => {
 
+
     const url = request.url;
 
     if (!url) {
         return
     }
 
-    const queryParams = new URLSearchParams(url.split('?')[1])
-    const token = queryParams.get('token') ?? ''
 
-    const testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiZTgzZDlkMi03ODY5LTQ5YjItYTIzOS04OGE5NTE1N2IzMmYiLCJpYXQiOjE3NjY5NDYzNjZ9.9LDaLS_7MxjCnZo_iU1D-z8pSQD-20PmLPfH7I9akV0"
-    const userId = checkUser(token || testToken)
+
+
+
+    const queryParams = new URLSearchParams(url.split('?')[1]);
+    const token = queryParams.get('token') ?? "";
+
+    // const testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiZTgzZDlkMi03ODY5LTQ5YjItYTIzOS04OGE5NTE1N2IzMmYiLCJpYXQiOjE3NjY5NDYzNjZ9.9LDaLS_7MxjCnZo_iU1D-z8pSQD-20PmLPfH7I9akV0"
+    const userId = checkUser(token)
 
 
     if (!userId) {
@@ -167,27 +172,34 @@ wss.on("connection", (ws, request) => {
 
             };
 
+            if (parsedData.type === "user_canvas") {
+                console.log("hi from usercanvas")
+                const { snapshot } = parsedData
+
+                const dbUser = Users.find(x => x.ws === ws)
+                const dbUserid = dbUser?.userId
+
+
+                if (!dbUserid) return;
+                await prismaClient.userCanvas.upsert({
+                    where: {
+
+                        userId: dbUserid,
+                    },
+                    update: {
+                        content: snapshot
+                    },
+                    create: {
+                        userId: dbUserid,
+                        content: snapshot
+                    }
+                });
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            }
 
 
 
@@ -198,6 +210,10 @@ wss.on("connection", (ws, request) => {
     catch (e) {
         console.error("Error handling message:", e);
     }
+
+
+
+
 
 
 

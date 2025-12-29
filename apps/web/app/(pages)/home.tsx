@@ -1,6 +1,6 @@
 "use client"
 
-import { CustomBtn } from "../../components/Btn"
+import { CustomBtn } from "../components/Btn"
 import { useRouter } from "next/navigation"
 
 export const Landing = () => {
