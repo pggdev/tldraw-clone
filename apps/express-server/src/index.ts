@@ -58,34 +58,39 @@ app.post("/login", async (req, res) => {
 
     const { email, password } = req.body
 
-    const user = await prismaClient.user.findFirst({
-        where: {
-            email,
+    try {
+
+        const user = await prismaClient.user.findFirst({
+            where: {
+                email,
+            }
+        })
+
+        if (!user) {
+            return res.status(403).json({
+                msg: "not authorized"
+            })
         }
-    })
 
-    if (!user) {
-        return res.status(403).json({
-            msg: "not authorized"
-        })
+
+        if (user.password !== password) {
+            return res.status(403).json({
+                msg: "invalid username or password"
+            })
+        }
+
+        //@ts-ignore
+        const userId = user.id
+        console.log(userId)
+
+
+
+        const token = jwt.sign({ userId }, JWT_SECRET)
+
+        res.json({ token, userId })
+    } catch {
+        console.log("error in login")
     }
-
-
-    if (user.password !== password) {
-        return res.status(403).json({
-            msg: "invalid username or password"
-        })
-    }
-
-    //@ts-ignore
-    const userId = user.id
-    console.log(userId)
-
-
-
-    const token = jwt.sign({ userId }, JWT_SECRET)
-
-    res.json({ token, userId })
 
 
 

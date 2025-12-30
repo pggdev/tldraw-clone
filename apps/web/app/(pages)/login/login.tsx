@@ -7,28 +7,23 @@ import { useState, useRef } from "react"
 import { BACKEND_URL } from "../../../config"
 import axios from "axios"
 
-export const Signup = ({ socket }: { socket?: WebSocket | null }) => {
+export const Login = ({ socket }: { socket?: WebSocket | null }) => {
     const [isOpen, setisOpen] = useState(false);
+    const router = useRouter()
 
-    const nameRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
-    const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
 
-
-
-
-
-    const signuphandler = async () => {
-        await axios.post(`${BACKEND_URL}/signup`, {
-            name: nameRef.current?.value,
+    const Loginhandler = async () => {
+        const response = await axios.post(`${BACKEND_URL}/login`, {
             email: emailRef.current?.value,
-            username: usernameRef.current?.value,
             password: passwordRef.current?.value
         })
 
-        setisOpen(false)
+        localStorage.setItem('token', response.data.token)
+
+        router.push('/')
     }
 
 
@@ -45,13 +40,12 @@ export const Signup = ({ socket }: { socket?: WebSocket | null }) => {
 
 
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-xl font-semibold text-center">Join Room</h1>
-                    <input ref={nameRef} type="text" placeholder="Name" className="border-2 border-neutral-300 rounded-lg px-2 py-1"></input>
+                    <h1 className="text-xl font-semibold text-center">Login</h1>
+
                     <input ref={emailRef} type="text" placeholder="Email" className="border-2 border-neutral-300 rounded-lg px-2 py-1"></input>
-                    <input ref={usernameRef} type="text" placeholder="username" className="border-2 border-neutral-300 rounded-lg px-2 py-1"></input>
                     <input ref={passwordRef} type="text" placeholder="password" className="border-2 border-neutral-300 rounded-lg px-2 py-1"></input>
                     <div className=" mt-3">
-                        <button className=" bg-purple-200  w-full rounded-lg px-2 py-1 text-sm font-normal text-black cursor-pointer active:scale-98" onClick={signuphandler}>Signup</button>
+                        <button className=" bg-purple-200  w-full rounded-lg px-2 py-1 text-sm font-normal text-black cursor-pointer active:scale-98" onClick={Loginhandler}>Login</button>
 
 
                     </div>
@@ -64,7 +58,7 @@ export const Signup = ({ socket }: { socket?: WebSocket | null }) => {
 
         </div>}
 
-        <CustomBtn onClick={() => setisOpen(true)}>Signup</CustomBtn>
+        <CustomBtn onClick={() => setisOpen(true)}>Login</CustomBtn>
 
 
 

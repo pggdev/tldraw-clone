@@ -5,33 +5,35 @@ import { CustomBtn } from "../../components/Btn"
 import { useRouter } from "next/navigation"
 import { useState, useRef } from "react"
 
-export const Createroom = ({ socket }: { socket?: WebSocket | null }) => {
+export const Joinroom = ({ socket }: { socket?: WebSocket | null }) => {
     const [isOpen, setisOpen] = useState(false);
     const router = useRouter()
 
 
     const roomnameRef = useRef<HTMLInputElement>(null);
 
-    const roomname = roomnameRef.current?.value
 
 
 
     const createhandler = () => {
+        const roomId = roomnameRef.current?.value
+        if (!roomId) return;
 
         if (socket && socket.readyState === WebSocket.OPEN) {
             socket.send(JSON.stringify({
                 type: "join_room",
-                roomId: Number(roomname)
+                roomId: Number(roomId)
 
             }))
 
 
             setisOpen(false)
 
+            router.push(`/?roomId=${roomId}`);
+
 
 
         }
-        return console.log("hi from the handler");
 
 
 

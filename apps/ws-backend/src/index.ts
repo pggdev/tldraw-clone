@@ -114,6 +114,7 @@ wss.on("connection", (ws, request) => {
 
 
             if (parsedData.type === "canvas_update") {
+                console.log("hi from roomcavas")
                 const { roomId, snapshot } = parsedData;
                 roomStates.set(roomId, snapshot)
 
@@ -122,7 +123,7 @@ wss.on("connection", (ws, request) => {
                     if (user.rooms.includes(roomId) && user.ws !== ws) {
                         user.ws.send(JSON.stringify({
                             type: "canvas_update",
-                            snapshot,
+                            content: snapshot,
                             roomId
                         }));
                     }
