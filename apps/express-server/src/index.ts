@@ -127,9 +127,9 @@ app.post("/create-room", auth, async (req: any, res: any) => {
             }
         })
 
-        res.json({
-            msg: "room created " + reponse.id
-        })
+        res.json(
+            reponse.id
+        )
 
     } catch (e: any) {
 

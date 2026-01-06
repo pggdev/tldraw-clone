@@ -15,7 +15,6 @@ export default function Canvas() {
     const params = useSearchParams()
     const [socket, setSocket] = useState<WebSocket | null>()
 
-
     const roomId = params.get('roomId') ? Number(params.get('roomId')) : null
 
     console.log(roomId)

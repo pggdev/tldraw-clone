@@ -3,12 +3,12 @@
 import { IconX } from "@tabler/icons-react"
 import { CustomBtn } from "../../components/Btn"
 import { useRouter } from "next/navigation"
-import { useState, useRef } from "react"
+import { useState, useRef, Dispatch, SetStateAction } from "react"
 import { BACKEND_URL } from "../../../config"
 import axios from "axios"
 
-export const Signup = ({ socket }: { socket?: WebSocket | null }) => {
-    const [isOpen, setisOpen] = useState(false);
+export const Signup = ({ socket, isOpen, setisOpen, setLoginisOpen }: { socket?: WebSocket | null, isOpen: boolean, setisOpen: Dispatch<SetStateAction<boolean>>, setLoginisOpen: Dispatch<SetStateAction<boolean>> }) => {
+
 
     const nameRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
@@ -28,11 +28,11 @@ export const Signup = ({ socket }: { socket?: WebSocket | null }) => {
             password: passwordRef.current?.value
         })
 
+        setLoginisOpen(true)
         setisOpen(false)
+
+
     }
-
-
-
 
 
     return <div className="">
