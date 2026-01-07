@@ -9,21 +9,27 @@ import { useEffect, useState } from "react"
 import { Createroom } from "../(pages)/createroom"
 import { Currentroom } from "./currentroom"
 import { Roomlist } from "./roomlist"
-
+import { Suspense } from 'react'
 export const Navbar = ({ className, socket }: { className?: string, socket?: WebSocket | null }) => {
     const [LoginisOpen, setLoginisOpen] = useState(false);
     const [isOpen, setisOpen] = useState(false)
-    const token = localStorage.getItem('token')
+    const [token, setToken] = useState<string | null>('')
+    useEffect(() => {
 
+        const savedToken = localStorage.getItem('token');
+        setToken(savedToken);
+    }, []);
 
 
 
     return <div className={cn("flex justify-between  px-4 py-2", className)}>
+        <Suspense fallback={<div>Loading...</div>}>
 
-        <div className="flex gap-5">
-            <h1 className="font-black text-xl text-black">Logo</h1>
-            <Currentroom />
-        </div>
+            <div className="flex gap-5">
+                <h1 className="font-black text-xl text-black">Logo</h1>
+                <Currentroom />
+            </div>
+        </Suspense>
 
         <div>
             <Roomlist />

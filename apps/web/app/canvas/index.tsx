@@ -3,7 +3,7 @@
 import { Timers, Tldraw, useEditor } from 'tldraw'
 import 'tldraw/tldraw.css'
 import { Navbar } from '../components/navbar'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { prismaClient } from '@repo/db/client'
 import { snapshot } from 'node:test'
 import { useSearchParams } from 'next/navigation'
@@ -48,7 +48,9 @@ export default function Canvas() {
 
         <div className="relative">
 
-            <div className=""><Navbar className='absolute top-0 z-10 w-full' socket={socket} /></div>
+            <Suspense fallback={<div>Loading...</div>}>
+                <div className=""><Navbar className='absolute top-0 z-10 w-full' socket={socket} /></div>
+            </Suspense>
             <div className='fixed inset-0 '>
 
                 <Tldraw persistenceKey='canvas'>
