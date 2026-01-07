@@ -119,7 +119,7 @@ app.post("/create-room", auth, async (req: any, res: any) => {
 
 
     try {
-        const reponse = await prismaClient.room.create({
+        const response = await prismaClient.room.create({
             data: {
                 //@ts-ignore
                 roomname,
@@ -128,7 +128,7 @@ app.post("/create-room", auth, async (req: any, res: any) => {
         })
 
         res.json(
-            reponse.id
+            response.id
         )
 
     } catch (e: any) {
@@ -143,6 +143,36 @@ app.post("/create-room", auth, async (req: any, res: any) => {
             error: e.message
         })
     }
+
+})
+
+
+app.post('/room-details', async (req, res) => {
+
+    const roomId = Number(req.body.roomId);
+    try {
+        const response = await prismaClient.room.findFirst({
+            where: {
+                id: roomId,
+            }
+        })
+        if (!response) {
+            res.json({
+                msg: "room doesn't exist"
+            })
+        }
+
+        res.status(200).json({ roomId: response?.id })
+    } catch (e: any) {
+
+        res.status(500).json({
+            msg: "server error",
+            error: e.message
+        })
+    }
+
+
+
 
 })
 
